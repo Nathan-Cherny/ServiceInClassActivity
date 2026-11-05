@@ -8,6 +8,10 @@ import android.os.Bundle
 import android.os.IBinder
 import android.widget.Button
 import android.widget.TextView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,6 +46,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        lifecycleScope.launch{
+            repeatOnLifecycle(Lifecycle.State.RESUMED){
+                TimerInfo.currentTime.collect{
+                    timerTextView.text = it.toString()
+                }
+            }
+
+        }
 
         bindService(
             Intent(this, TimerService::class.java),
