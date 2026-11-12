@@ -10,7 +10,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -94,25 +93,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.start -> timerBinder?.run{
-                if(!isRunning) {
-                    start(100)
-                    startButton.text = "Pause"
-                }
-                else{
-                    pause()
+        return when(item.itemId){
+            R.id.action_start -> {
+                timerBinder?.run {
+                    if (!isRunning) {
+                        start(100)
+                        startButton.text = "Pause"
+                    } else {
+                        pause()
 
-                    startButton.text = if(isPaused) "Resume" else "Pause"
+                        startButton.text = if (isPaused) "Resume" else "Pause"
+                    }
                 }
+                true
             }
 
-            R.id.stop -> timerBinder?.run{
-                stop()
-                startButton.text = "Start"
+            R.id.action_stop -> {
+                timerBinder?.run {
+                    stop()
+                    startButton.text = "Start"
+                }
+                true
             }
+
+            else -> false
+
+
         }
 
-        return super.onOptionsItemSelected(item)
     }
 }
